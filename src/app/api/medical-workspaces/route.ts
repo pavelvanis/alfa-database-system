@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import MedicalWorkspaceModel, {
-  IMedicalWorkspace,
-  IMedicalWorkspaceSchemaOpt,
-} from "@/models/medical-workspace";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
+import { IMedicalWorkspace, MedicalWorkspaceModel } from "@/models";
+import { IMedicalWorkspaceSchemaOpt } from "@/models/medical-workspace";
 
 // Get all medical workspaces
 export const GET = async () => {
@@ -37,7 +35,7 @@ export const POST = async (req: NextRequest) => {
       name: validatedBody.name,
     });
     if (workspaceExist)
-      return new NextResponse("Patient already exists!", { status: 400 });
+      return new NextResponse("Workspace with this name already exists!", { status: 400 });
 
     // Create medical workspace
     const workspace = await MedicalWorkspaceModel.create(validatedBody);

@@ -1,7 +1,11 @@
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-import PatientModel, { IPatient, IPatientSchema, IPatientSchemaOpt } from "@/models/patient";
+import PatientModel, {
+  IPatient,
+  IPatientSchema,
+  IPatientSchemaOpt,
+} from "@/models/patient";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
@@ -59,9 +63,13 @@ export const PUT = async (
     if (!isValidObjectId(id)) return errorHandler("Invalid patient id", 400);
 
     // Update patient by id
-    const updatedPatient = await PatientModel.findByIdAndUpdate(id, validatedBody, {
-      new: true,
-    });
+    const updatedPatient = await PatientModel.findByIdAndUpdate(
+      id,
+      validatedBody,
+      {
+        new: true,
+      }
+    );
 
     if (!updatedPatient) return errorHandler("Patient not found", 404);
     return NextResponse.json<SuccessResponse<IPatient>>({

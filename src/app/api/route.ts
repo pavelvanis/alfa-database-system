@@ -7,13 +7,10 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
     const state =
       mongoose.connection.readyState == 1 ? "connected" : "disconnected";
 
-    return NextResponse.json(
-      { message: state },
-      { status: 200 }
-    ) as SuccessResponse<string>;
+    return NextResponse.json({ message: state }, { status: 200 });
   } catch (error) {
     return new NextResponse("Something went wrong", {
       status: 500,
-    }) as ErrorResponse<string>;
+    });
   }
 };

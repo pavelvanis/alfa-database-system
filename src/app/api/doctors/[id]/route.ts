@@ -1,51 +1,49 @@
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-import MedicineModel, {
-  IMedicine,
-  IMedicineSchemaOpt,
-} from "@/models/medicine";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
+import { DoctorModel, IDoctor } from "@/models";
+import { DoctorSchemaZodOpt } from "@/models/doctor";
 
-// Get department by id
+// Get doctor by id
 export const GET = async (
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) => {
   try {
     // Check valid id
-    if (!isValidObjectId(id)) return errorHandler("Invalid medicine id", 400);
+    if (!isValidObjectId(id)) return errorHandler("Invalid doctor id", 400);
 
-    // Find department by id
-    const medicine = await MedicineModel.findById(id);
-    if (!medicine) return errorHandler("Medicine not found", 404);
+    // Find doctor by id
+    const doctor = await DoctorModel.findById(id);
+    if (!doctor) return errorHandler("Doctor not found", 404);
 
-    return NextResponse.json<SuccessResponse<IMedicine>>({
-      items: medicine,
+    return NextResponse.json<SuccessResponse<IDoctor>>({
+      items: doctor,
     });
   } catch (error) {
     return errorHandler(error);
   }
 };
 
-// Update department by id
+// Update doctor by id
 export const PUT = async (
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) => {
   try {
-    const body = (await req.json()) as IMedicine;
+    const body = (await req.json()) as IDoctor;
 
     // Zod validation
-    const validatedBody = zodValidate(IMedicineSchemaOpt, body);
+    const validatedBody = zodValidate(DoctorSchemaZodOpt, body);
 
     // Check valid id
-    if (!isValidObjectId(id)) return errorHandler("Invalid department id", 400);
+    if (!isValidObjectId(id)) return errorHandler("Invalid doctor id", 400);
 
-    // Update department by id
-    const updatedDepartment = await MedicineModel.findByIdAndUpdate(
+    // Update doctor by id
+    const updatedDoctor = await DoctorModel.findByIdAndUpdate(
       id,
       validatedBody,
       {
@@ -53,30 +51,30 @@ export const PUT = async (
       }
     );
 
-    if (!updatedDepartment) return errorHandler("Department not found", 404);
-    return NextResponse.json<SuccessResponse<IMedicine>>({
-      items: updatedDepartment,
+    if (!updatedDoctor) return errorHandler("Doctor not found", 404);
+    return NextResponse.json<SuccessResponse<IDoctor>>({
+      items: updatedDoctor,
     });
   } catch (error) {
     return errorHandler(error);
   }
 };
 
-// Delete department by id
+// Delete doctor by id
 export const DELETE = async (
   req: NextRequest,
   { params: { id } }: { params: { id: string } }
 ) => {
   try {
     // Check valid id
-    if (!isValidObjectId(id)) return errorHandler("Invalid medicine id", 400);
+    if (!isValidObjectId(id)) return errorHandler("Invalid doctor id", 400);
 
-    // Delete department by id
-    const deletedMedicine = await MedicineModel.findByIdAndDelete(id);
-    if (!deletedMedicine) return errorHandler("Medicine not found", 404);
+    // Delete doctor by id
+    const deletedDoctor = await DoctorModel.findByIdAndDelete(id);
+    if (!deletedDoctor) return errorHandler("Doctor not found", 404);
 
-    return NextResponse.json<SuccessResponse<IMedicine>>({
-      items: deletedMedicine,
+    return NextResponse.json<SuccessResponse<IDoctor>>({
+      items: deletedDoctor,
     });
   } catch (error) {
     return errorHandler(error);

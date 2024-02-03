@@ -4,6 +4,7 @@ import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
 import DoctorModel, { IDoctor, DoctorSchemaZod } from "@/models/doctor";
+import { DepartmentModel, MedicalWorkspaceModel } from "@/models";
 
 // Get all doctors
 export const GET = async () => {
@@ -20,32 +21,41 @@ export const GET = async () => {
 };
 
 // Create new doctor
-// export const POST = async (req: NextRequest) => {
-//   try {
-//     const body = (await req.json()) as IDoctor;
+export const POST = async (req: NextRequest) => {
+  try {
+    const body = (await req.json()) as IDoctor;
 
-//     // Add mongo sanitization
+    // Add mongo sanitization
 
-//     // Zod validation
-//     const validatedBody = zodValidate(IDoctorSchema, body);
+    // Zod validation
+    const validatedBody = zodValidate(DoctorSchemaZod, body) as IDoctor;
 
-//     // Check if patient already exists
-//     const doctorExist = await DoctorModel.findOne({
-//       identification_number: validatedBody.identification_number,
-//     });
-//     if (doctorExist)
-//       return new NextResponse("Doctor with identificator already exists!", {
-//         status: 400,
-//       });
+    const workspaceExist = await MedicalWorkspaceModel.findById(
+      validatedBody.medical_workspace
+    );
+    if (!workspaceExist) return errorHandler("Workspace not found!", 404);
+    const departmentExist = await DepartmentModel.findById(
+      validatedBody.department
+    );
+    if (!departmentExist) return errorHandler("Department not found!", 404);
 
-//     // Create doctor
-//     const doctor = await DoctorModel.create(validatedBody);
+    // Check if doctor already exists
+    const doctorExist = await DoctorModel.findOne({
+      identification_number: validatedBody.identification_number,
+    });
+    if (doctorExist)
+      return new NextResponse("Doctor with identificator already exists!", {
+        status: 400,
+      });
 
-//     return NextResponse.json<SuccessResponse<IDoctor>>(
-//       { items: doctor },
-//       { status: 200 }
-//     );
-//   } catch (error) {
-//     return errorHandler(error);
-//   }
-// };
+    // Create doctor
+    const doctor = await DoctorModel.create(validatedBody);
+
+    return NextResponse.json<SuccessResponse<IDoctor>>(
+      { items: doctor },
+      { status: 200 }
+    );
+  } catch (error) {
+    return errorHandler(error);
+  }
+};
