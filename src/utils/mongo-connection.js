@@ -1,48 +1,34 @@
 const mongoose = require("mongoose");
 
 module.exports = () => {
-  // If missing MONGODB_URI, throw error
   if (!process.env.MONGODB_URI)
-    throw new Error("MONGODB_URI is missing from .env file");
+    throw new Error("MONGODB_URI is not defined in .env");
 
-  // Connect database
-  mongoose
-    .connect(process.env.MONGODB_URI)
-    .then(() => {
-      console.log("mongodb is connected...");
-    })
-    .catch((err) => {
-      console.log(err);
+  if (mongoose.connection.readyState !== 1) {
+    mongoose.connect(process.env.MONGODB_URI).catch((err) => {
+      console.error("Error in MongoDB connection:", err);
     });
+  }
 
-  // Handle actions
   mongoose.connection.on("connected", () => {
-    console.log("Mongoose db was connected...");
+    console.log("Mongoose connection is connected");
   });
 
-  mongoose.connection.on("error", () => {
-    console.log("Error in mongoose...");
+  mongoose.connection.on("error", (err) => {
+    console.error("Error in Mongoose connection:", err);
   });
 
   mongoose.connection.on("disconnected", () => {
-    console.log("Mongoose db was disconnected...");
+    console.warn("Mongoose connection is disconnected");
   });
 
-  process.on("SIGINT", async () => {
+  const gracefulShutdown = async (signal) => {
     await mongoose.disconnect();
-    console.log("Disconnected from mongo database");
+    console.log(`Disconnected from MongoDB database on signal ${signal}`);
     process.exit(0);
-  });
+  };
 
-  process.on("SIGTERM", async () => {
-    await mongoose.disconnect();
-    console.log("Disconnected from mongo database");
-    process.exit(0);
-  });
-
-  process.on("SIGQUIT", async () => {
-    await mongoose.disconnect();
-    console.log("Disconnected from mongo database");
-    process.exit(0);
-  });
+  process.on("SIGINT", () => gracefulShutdown("SIGINT"));
+  process.on("SIGTERM", () => gracefulShutdown("SIGTERM"));
+  process.on("SIGQUIT", () => gracefulShutdown("SIGQUIT"));
 };
