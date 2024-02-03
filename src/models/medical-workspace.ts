@@ -1,9 +1,6 @@
 import * as z from "zod";
 import mongoose, { Schema, Document, Model } from "mongoose";
 
-import DoctorModel from "./doctor";
-import DepartmentModel from "./department";
-
 export const IMedicalWorkspaceSchemaOpt = z.object({
   address: z
     .object({
@@ -34,8 +31,6 @@ export const IMedicalWorkspaceSchemaOpt = z.object({
     .min(2, "Name must be at least 2 characters long")
     .max(36, "Name must be at most 36 characters long")
     .optional(),
-  doctors: z.array(z.string()).optional(),
-  departments: z.array(z.string()).optional(),
 });
 
 export const IMedicalWorkspaceSchema = z.object({
@@ -61,8 +56,6 @@ export const IMedicalWorkspaceSchema = z.object({
     .string()
     .min(2, "Name must be at least 2 characters long")
     .max(36, "Name must be at most 36 characters long"),
-  doctors: z.array(z.string()),
-  departments: z.array(z.string()),
 });
 
 export interface IMedicalWorkspace
@@ -110,20 +103,6 @@ const MedicalWorkspaceSchema: Schema = new Schema<
       minlength: [2, "Name must be at least 2 characters long"],
       maxlength: [36, "Name must be at most 36 characters long"],
     },
-    doctors: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: DoctorModel,
-        required: false,
-      },
-    ],
-    departments: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: DepartmentModel,
-        required: false,
-      },
-    ],
   },
   { timestamps: true }
 );
