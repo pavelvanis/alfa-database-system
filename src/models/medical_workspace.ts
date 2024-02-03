@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 import DoctorModel from "./doctor";
 import DepartmentModel from "./department";
 
-interface IMedicalWorkspace extends Document {
+export interface IMedicalWorkspace extends Document {
   address: {
     street: string;
     country: string;
@@ -73,11 +73,11 @@ const MedicalWorkspaceSchema: Schema = new Schema<
   { timestamps: true }
 );
 
-const MedicalWorkspace =
+const MedicalWorkspaceModel =
   mongoose.models.medical_workspace ||
   mongoose.model<IMedicalWorkspace>(
     "medical_workspace",
     MedicalWorkspaceSchema
   );
 
-export default MedicalWorkspace as Model<IMedicalWorkspace, {}, IMethods>;
+export default MedicalWorkspaceModel as Model<IMedicalWorkspace, {}, IMethods>;
