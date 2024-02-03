@@ -1,16 +1,55 @@
-import mongoose, { Document, Types, Schema, Model } from "mongoose";
-import MedicalWorkspace from "./medical_workspace";
+import * as z from "zod";
+import mongoose, { Document, Schema, Model } from "mongoose";
+
+import MedicalWorkspace from "./medical-workspace";
 import DepartmentModel from "./department";
 
-export interface IDoctor extends Document {
-  first_name: string;
-  last_name: string;
-  phone?: string;
-  email?: string;
-  identification_number: string;
-  medical_workspace?: Types.ObjectId;
-  department?: Types.ObjectId;
-}
+export const DoctorSchemaZodOpt = z.object({
+  first_name: z
+    .string()
+    .min(1, "First name must be at least 1 characters long")
+    .max(36, "First name must be at most 236 characters long")
+    .optional(),
+  last_name: z
+    .string()
+    .min(1, "Last name must be at least 1 characters long")
+    .max(36, "Last name must be at most 236 characters long")
+    .optional(),
+  phone: z
+    .string()
+    .regex(
+      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+      "Invalid phone number"
+    )
+    .optional(),
+  email: z.string().email("Invalid email").optional(),
+  identification_number: z.string().optional(),
+  medical_workspace: z.string().optional(),
+  department: z.string().optional(),
+});
+export const DoctorSchemaZod = z.object({
+  first_name: z
+    .string()
+    .min(1, "First name must be at least 1 characters long")
+    .max(36, "First name must be at most 236 characters long"),
+  last_name: z
+    .string()
+    .min(1, "Last name must be at least 1 characters long")
+    .max(36, "Last name must be at most 236 characters long"),
+  phone: z
+    .string()
+    .regex(
+      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
+      "Invalid phone number"
+    )
+    .optional(),
+  email: z.string().email("Invalid email").optional(),
+  identification_number: z.string(),
+  medical_workspace: z.string().optional(),
+  department: z.string().optional(),
+});
+
+export interface IDoctor extends z.infer<typeof DoctorSchemaZod>, Document {}
 
 interface IMethods {}
 

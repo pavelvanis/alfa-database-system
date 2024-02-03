@@ -1,21 +1,43 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
+import * as z from "zod";
 
-export type PatientGender = "male" | "female" | "other";
+const PatientGender = z.enum(["male", "female", "other"]);
 
-export interface IPatient extends Document {
-  first_name: string;
-  last_name: string;
-  birth_date: Date;
-  born_id: string;
-  insurance_number: string;
-  gender: PatientGender;
-  address: {
-    street: string;
-    country: string;
-    city: string;
-    zip_code: string;
-  };
-}
+const PatientAddressSchemaOpt = z.object({
+  street: z.string().optional(),
+  country: z.string().optional(),
+  city: z.string().optional(),
+  zip_code: z.string().optional(),
+});
+
+export const IPatientSchemaOpt = z.object({
+  first_name: z.string().optional(),
+  last_name: z.string().optional(),
+  birth_date: z.date().optional(),
+  born_id: z.string().optional(),
+  insurance_number: z.string().optional(),
+  gender: PatientGender,
+  address: PatientAddressSchemaOpt,
+});
+
+const PatientAddressSchema = z.object({
+  street: z.string(),
+  country: z.string(),
+  city: z.string(),
+  zip_code: z.string(),
+});
+
+export const IPatientSchema = z.object({
+  first_name: z.string(),
+  last_name: z.string(),
+  birth_date: z.date(),
+  born_id: z.string(),
+  insurance_number: z.string(),
+  gender: PatientGender,
+  address: PatientAddressSchema,
+});
+
+export interface IPatient extends z.infer<typeof IPatientSchema>, Document {}
 
 interface IMethods {}
 
