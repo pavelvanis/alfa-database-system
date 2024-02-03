@@ -5,7 +5,7 @@ import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
 import MedicineModel, { IMedicine, IMedicineSchema } from "@/models/medicine";
 
-// Get all patients
+// Get all medicines
 export const GET = async () => {
   try {
     const medicines = await MedicineModel.find({});
@@ -19,7 +19,7 @@ export const GET = async () => {
   }
 };
 
-// Create new patient
+// Create new medicine
 export const POST = async (req: NextRequest) => {
   try {
     const body = (await req.json()) as IMedicine;
@@ -29,7 +29,7 @@ export const POST = async (req: NextRequest) => {
     // Zod validation
     const validatedBody = zodValidate(IMedicineSchema, body);
 
-    // Check if patient already exists
+    // Check if medicine already exists
     const medicineExist = await MedicineModel.findOne({
       name: validatedBody.name,
     });
@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest) => {
         status: 400,
       });
 
-    // Create patient
+    // Create medicine
     const medicine = await MedicineModel.create(validatedBody);
 
     return NextResponse.json<SuccessResponse<IMedicine>>(
