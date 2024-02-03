@@ -1,7 +1,7 @@
 import * as z from "zod";
 import mongoose, { Document, Schema, Model } from "mongoose";
 
-import MedicalWorkspace from "./medical-workspace";
+import MedicalWorkspaceModel from "./medical-workspace";
 import DepartmentModel from "./department";
 
 export const DoctorSchemaZodOpt = z.object({
@@ -90,7 +90,7 @@ const DoctorSchema = new Schema<IDoctor, {}, IMethods>(
     },
     medical_workspace: {
       type: Schema.Types.ObjectId,
-      ref: MedicalWorkspace,
+      ref: MedicalWorkspaceModel,
       required: false,
     },
     department: {
@@ -103,6 +103,7 @@ const DoctorSchema = new Schema<IDoctor, {}, IMethods>(
 );
 
 const DoctorModel =
-  mongoose.models.doctor || mongoose.model("doctor", DoctorSchema);
+  mongoose.models.doctor ||
+  (mongoose.model("doctor", DoctorSchema) as Model<IDoctor, {}, IMethods>);
 
 export default DoctorModel as Model<IDoctor, {}, IMethods>;
