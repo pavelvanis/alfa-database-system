@@ -1,19 +1,5 @@
-import * as z from "zod";
-import mongoose, { Schema, Document, Model } from "mongoose";
-
-export const IDepartmentSchemaOpt = z.object({
-  name: z.string().min(2).max(40).optional(),
-  specification: z.string().min(2).max(200).optional(),
-});
-
-export const IDepartmentSchema = z.object({
-  name: z.string().min(2).max(40),
-  specification: z.string().min(2).max(200),
-});
-
-export interface IDepartment
-  extends z.infer<typeof IDepartmentSchema>,
-    Document {}
+import { Schema, Model, models, model } from "mongoose";
+import { IDepartment } from "./types";
 
 interface IMethods {}
 
@@ -37,6 +23,6 @@ const departmentSchema = new Schema<IDepartment, {}, IMethods>(
 );
 
 const DepartmentModel =
-  mongoose.models.department || mongoose.model("department", departmentSchema);
+  models.department || model("department", departmentSchema);
 
 export default DepartmentModel as Model<IDepartment, {}, IMethods>;
