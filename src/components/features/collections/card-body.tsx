@@ -3,6 +3,7 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 
 import { CollectionCardProps } from "./collection-card";
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline";
 
 const PLACEHOLDER = "placeholder";
 
@@ -18,18 +19,19 @@ const CollectionCardBody: React.FC<CollectionCardProps> = ({ name, data }) => {
       <table className="w-full min-w-max table-auto text-left">
         <thead>
           <tr>
-            {HEAD.map((head) => (
+            {HEAD.map((head, index) => (
               <th
                 key={head}
-                className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                className="cursor-pointer border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 transition-colors hover:bg-blue-gray-50"
               >
                 <Typography
                   placeholder={PLACEHOLDER}
                   variant="small"
                   color="blue-gray"
-                  className="font-normal leading-none opacity-70"
+                  className="flex items-center justify-between gap-2 font-normal leading-none opacity-70"
                 >
-                  {head}
+                  {head}{" "}
+                  <ChevronUpDownIcon strokeWidth={2} className="h-4 w-4" />
                 </Typography>
               </th>
             ))}
@@ -60,7 +62,10 @@ const CollectionCardBody: React.FC<CollectionCardProps> = ({ name, data }) => {
                     : "p-4 border-b border-blue-gray-50";
 
                   return (
-                    <td key={index} className={twMerge(classes, "max-w-[300px]")}>
+                    <td
+                      key={index}
+                      className={twMerge(classes, "max-w-[300px]")}
+                    >
                       <Typography
                         placeholder={PLACEHOLDER}
                         variant="small"
