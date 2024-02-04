@@ -12,7 +12,7 @@ const TesterHeader = () => {
       shadow={false}
       className="rounded-none"
     >
-      <div className="mb-8 flex items-center justify-between gap-8">
+      <div className="mb-2 flex items-center justify-between gap-8">
         <div>
           <Typography placeholder={PLACEHOLDER} variant="h5" color="blue-gray">
             eRecept
@@ -26,9 +26,9 @@ const TesterHeader = () => {
           </Typography>
         </div>
         <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
-          <Link href="/tables">
+          <Link href="/collections">
             <Button placeholder={PLACEHOLDER} variant="outlined" size="sm">
-              view tables
+              view collections
             </Button>
           </Link>
           <Button
@@ -40,7 +40,6 @@ const TesterHeader = () => {
           </Button>
         </div>
       </div>
-      <div>Some options here</div>
     </CardHeader>
   );
 };

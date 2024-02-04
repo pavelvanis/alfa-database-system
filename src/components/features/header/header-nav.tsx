@@ -10,7 +10,7 @@ const HeaderNav = () => {
     >
       <Typography
         placeholder="Placeholder"
-        as="a"
+        as={Link}
         href="/tester"
         variant="small"
         color="blue-gray"
@@ -26,7 +26,7 @@ const HeaderNav = () => {
       <HeaderMenu />
       <Typography
         placeholder="Placeholder"
-        as="a"
+        as={Link}
         href="/docs"
         variant="small"
         color="blue-gray"
@@ -36,7 +36,6 @@ const HeaderNav = () => {
           placeholder="Placeholder"
           className="flex items-center gap-2 py-2 pr-4"
         >
-          {/* <Link href="/">Docs</Link> */}
           Docs
         </ListItem>
       </Typography>
