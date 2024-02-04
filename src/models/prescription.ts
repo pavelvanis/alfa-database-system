@@ -40,7 +40,7 @@ const PrescriptionSchema: Schema = new Schema<IPrescription, {}, IMethods>(
     },
     medicines: [
       {
-        medicine_id: {
+        medicine: {
           type: Schema.Types.ObjectId,
           ref: MedicineModel,
           required: [true, "Medicine is required"],
