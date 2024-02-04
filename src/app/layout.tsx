@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Josefin_Sans } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/features/header";
+import { Header } from "@/components/features/header/header";
 import Footer from "@/components/features/footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,10 +18,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="bg-gray-50">
       <body className={inter.className}>
         <Header />
-        {children}
+        <main className=" flex-1 max-w-screen-xl m-auto w-full rounded-2xl flex">
+          <div className="flex-1 mx-4 my-2 rounded-2xl overflow-hidden">{children}</div>
+        </main>
         <Footer />
       </body>
     </html>
