@@ -11,7 +11,7 @@ const HeaderNav = () => {
       <Typography
         placeholder="Placeholder"
         as="a"
-        href="#"
+        href="/tester"
         variant="small"
         color="blue-gray"
         className="font-medium"
@@ -27,7 +27,7 @@ const HeaderNav = () => {
       <Typography
         placeholder="Placeholder"
         as="a"
-        href="/"
+        href="/docs"
         variant="small"
         color="blue-gray"
         className="font-medium"

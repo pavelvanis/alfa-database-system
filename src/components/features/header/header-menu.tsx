@@ -4,12 +4,9 @@ import {
   Bars4Icon,
   ChevronDownIcon,
   GlobeAmericasIcon,
-  NewspaperIcon,
   PhoneIcon,
-  RectangleGroupIcon,
   SquaresPlusIcon,
   SunIcon,
-  TagIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import {
@@ -24,32 +21,32 @@ import {
 
 const navListMenuItems = [
   {
-    title: "Products",
+    title: "Patients",
     description: "Find the perfect solution for your needs.",
     icon: SquaresPlusIcon,
   },
   {
-    title: "About Us",
+    title: "Doctors",
     description: "Meet and learn about our dedication",
     icon: UserGroupIcon,
   },
   {
-    title: "Blog",
+    title: "Medicines",
     description: "Find the perfect solution for your needs.",
     icon: Bars4Icon,
   },
   {
-    title: "Services",
+    title: "Departments",
     description: "Learn how we can help you achieve your goals.",
     icon: SunIcon,
   },
   {
-    title: "Support",
+    title: "Medical workspaces",
     description: "Reach out to us for assistance or inquiries",
     icon: GlobeAmericasIcon,
   },
   {
-    title: "Contact",
+    title: "Prescriptions",
     description: "Find the perfect solution for your needs.",
     icon: PhoneIcon,
   },
