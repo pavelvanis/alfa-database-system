@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const MedicineSchemaZodOpt = z.object({
-  medicine_id: z.string(),
+  medicine: z.string(),
   quantity: z
     .number()
     .min(1, "Quantity must be at least 1")
@@ -26,8 +26,8 @@ export const PrescriptionSchemaZodOpt = z.object({
   medicines: z.array(MedicineSchemaZodOpt).optional(),
 });
 
-const MedicineSchemaZod = z.object({
-  medicine_id: z.string(),
+export const MedicineSchemaZod = z.object({
+  medicine: z.string(),
   quantity: z
     .number()
     .min(1, "Quantity must be at least 1")
