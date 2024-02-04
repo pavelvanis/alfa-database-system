@@ -1,3 +1,4 @@
+"use client";
 import { ChevronUpDownIcon, PencilIcon } from "@heroicons/react/24/outline";
 import {
   CardBody,
@@ -5,10 +6,10 @@ import {
   IconButton,
   Tooltip,
   Typography,
-} from "@material-tailwind/react";
-import React from "react";
-import { getPrescriptions } from "./utils";
-import { IPrescription } from "@/models/types";
+} from "@/components/ui";
+import React, { useEffect } from "react";
+import { Prescription } from "@/models/types/prescription";
+import { useSession } from "@/components/providers/SessionProvider";
 
 const PLACEHOLDER = "Placeholder";
 const TABLE_HEAD = [
@@ -22,78 +23,10 @@ const TABLE_HEAD = [
   "",
 ];
 
-const TABLE_ROWS = [
-  {
-    created_at: new Date(),
-    expires_at: new Date(),
-    doctor: "MuDR. Smith",
-    patient: "Paul",
-    status: "active",
-    medicines: [
-      {
-        name: "Aspirin",
-        quantity: 1,
-        dosage: "1x1",
-        days: 30,
-      },
-    ],
-  },
-  {
-    created_at: new Date(),
-    expires_at: new Date(),
-    doctor: "MuDR. Smith",
-    patient: "Paul",
-    status: "expired",
-    medicines: [
-      {
-        name: "Modafen",
-        quantity: 1,
-        dosage: "1x1",
-        days: 30,
-      },
-      {
-        name: "Penbene",
-        quantity: 1,
-        dosage: "1x1",
-        days: 30,
-      },
-      {
-        name: "Nurofen",
-        quantity: 3,
-        dosage: "1x1",
-        days: 30,
-      },
-      {
-        name: "Aspirin",
-        quantity: 2,
-        dosage: "1x1",
-        days: 30,
-      },
-    ],
-  },
-  {
-    created_at: new Date(),
-    expires_at: new Date(),
-    picked_at: new Date(),
-    doctor: "MuDR. Smith",
-    patient: "Paul",
-    status: "picked",
-    medicines: [
-      {
-        name: "Nurofen",
-        quantity: 1,
-        dosage: "1x1",
-        days: 30,
-      },
-    ],
-  },
-];
+const TesterData = () => {
+  const { data, loading } = useSession();
+  const { prescriptions } = data;
 
-type Data = {
-  prescriptions: IPrescription[];
-};
-
-const TesterData = ({}: Data) => {
   return (
     <CardBody placeholder="Placeholder" className="px-0">
       <table className="mt-4 w-full min-w-max table-auto text-left">
@@ -120,182 +53,207 @@ const TesterData = ({}: Data) => {
           </tr>
         </thead>
         <tbody>
-          {TABLE_ROWS.map(
-            (
-              {
-                created_at,
-                expires_at,
-                picked_at,
-                doctor,
-                patient,
-                status,
-                medicines,
-              },
-              index
-            ) => {
-              const isLast = index === TABLE_ROWS.length - 1;
-              const classes = isLast
-                ? "p-4"
-                : "p-4 border-b border-blue-gray-50";
+          {prescriptions
+            ? prescriptions.map(
+                (
+                  {
+                    created_at,
+                    expires_at,
+                    picked_at,
+                    doctor,
+                    patient,
+                    status,
+                    medicines,
+                  },
+                  index
+                ) => {
+                  const isLast = index === prescriptions.length - 1;
+                  const classes = isLast
+                    ? "p-4"
+                    : "p-4 border-b border-blue-gray-50";
 
-              return (
-                <tr key={index}>
-                  {/* created_at */}
-                  <td className={classes}>
-                    <div className="flex items-center gap-3">
-                      <div className="flex flex-col">
-                        <Typography
-                          placeholder={PLACEHOLDER}
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {created_at.toLocaleDateString()}
-                        </Typography>
-                        <Typography
-                          placeholder={PLACEHOLDER}
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal opacity-70"
-                        >
-                          {created_at.toLocaleTimeString()}
-                        </Typography>
-                      </div>
-                    </div>
-                  </td>
-                  {/* expires_at */}
-                  <td className={classes}>
-                    <div className="flex items-center gap-3">
-                      <div className="flex flex-col">
-                        <Typography
-                          placeholder={PLACEHOLDER}
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {expires_at.toLocaleDateString()}
-                        </Typography>
-                        <Typography
-                          placeholder={PLACEHOLDER}
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal opacity-70"
-                        >
-                          {expires_at.toLocaleTimeString()}
-                        </Typography>
-                      </div>
-                    </div>
-                  </td>
-                  {/* picked_at */}
-                  <td className={classes}>
-                    <div className="flex items-center gap-3">
-                      {picked_at ? (
-                        <div className="flex flex-col">
-                          <Typography
-                            placeholder={PLACEHOLDER}
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {picked_at.toLocaleDateString()}
-                          </Typography>
-                          <Typography
-                            placeholder={PLACEHOLDER}
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal opacity-70"
-                          >
-                            {picked_at.toLocaleTimeString()}
-                          </Typography>
-                        </div>
-                      ) : (
-                        <Typography
-                          placeholder={PLACEHOLDER}
-                          variant="small"
-                          className="font-normal"
-                        >
-                          Not picked
-                        </Typography>
-                      )}
-                    </div>
-                  </td>
-                  {/* doctor */}
-                  <td className={classes}>
-                    <Typography
-                      placeholder={PLACEHOLDER}
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {doctor}
-                    </Typography>
-                  </td>
-                  {/* patient */}
-                  <td className={classes}>
-                    <Typography
-                      placeholder={PLACEHOLDER}
-                      variant="small"
-                      color="blue-gray"
-                      className="font-normal"
-                    >
-                      {patient}
-                    </Typography>
-                  </td>
-                  {/* status */}
-                  <td className={classes}>
-                    <div className="w-max">
-                      <Chip
-                        variant="ghost"
-                        size="sm"
-                        value={status}
-                        color={
-                          status === "active"
-                            ? "blue"
-                            : status === "picked"
-                            ? "green"
-                            : "red"
-                        }
-                      />
-                    </div>
-                  </td>
-                  {/* medicines */}
-                  <td className={classes}>
-                    <Tooltip
-                      content={medicines.map(({ name, quantity }, index) => {
-                        const isLast = index === medicines.length - 1;
-
-                        return `${name}: ${quantity}x${isLast ? "" : ", "}`;
-                      })}
-                      placement="top"
-                    >
-                      <div className="w-max max-h-20 overflow-hidden">
-                        {medicines.map(({ name, quantity }, index) => {
-                          const isLast = index === medicines.length - 1;
-                          return (
-                            <Typography placeholder={PLACEHOLDER} key={index}>
-                              {name}
-                              {`: ${quantity}x`}
-                              {isLast ? "" : ", "}
+                  return (
+                    <tr key={index}>
+                      {/* created_at */}
+                      <td className={classes}>
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col">
+                            <Typography
+                              placeholder={PLACEHOLDER}
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {new Date(created_at).toLocaleDateString()}
                             </Typography>
-                          );
-                        })}
-                      </div>
-                    </Tooltip>
-                  </td>
-                  {/* actions */}
-                  <td className={classes}>
-                    <Tooltip content="Edit User">
-                      <IconButton placeholder={PLACEHOLDER} variant="text">
-                        <PencilIcon className="h-4 w-4" />
-                      </IconButton>
-                    </Tooltip>
-                  </td>
-                </tr>
-              );
-            }
-          )}
+                            <Typography
+                              placeholder={PLACEHOLDER}
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal opacity-70"
+                            >
+                              {new Date(created_at).toLocaleTimeString()}
+                            </Typography>
+                          </div>
+                        </div>
+                      </td>
+                      {/* expires_at */}
+                      <td className={classes}>
+                        <div className="flex items-center gap-3">
+                          <div className="flex flex-col">
+                            <Typography
+                              placeholder={PLACEHOLDER}
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal"
+                            >
+                              {new Date(expires_at).toLocaleDateString()}
+                            </Typography>
+                            <Typography
+                              placeholder={PLACEHOLDER}
+                              variant="small"
+                              color="blue-gray"
+                              className="font-normal opacity-70"
+                            >
+                              {new Date(expires_at).toLocaleTimeString()}
+                            </Typography>
+                          </div>
+                        </div>
+                      </td>
+                      {/* picked_at */}
+                      <td className={classes}>
+                        <div className="flex items-center gap-3">
+                          {picked_at ? (
+                            <div className="flex flex-col">
+                              <Typography
+                                placeholder={PLACEHOLDER}
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal"
+                              >
+                                {picked_at.toLocaleDateString()}
+                              </Typography>
+                              <Typography
+                                placeholder={PLACEHOLDER}
+                                variant="small"
+                                color="blue-gray"
+                                className="font-normal opacity-70"
+                              >
+                                {picked_at.toLocaleTimeString()}
+                              </Typography>
+                            </div>
+                          ) : (
+                            <Typography
+                              placeholder={PLACEHOLDER}
+                              variant="small"
+                              className="font-normal"
+                            >
+                              Not picked
+                            </Typography>
+                          )}
+                        </div>
+                      </td>
+                      {/* doctor */}
+                      <td className={classes}>
+                        <Typography
+                          placeholder={PLACEHOLDER}
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {doctor.last_name} {doctor.first_name}
+                        </Typography>
+                      </td>
+                      {/* patient */}
+                      <td className={classes}>
+                        <Typography
+                          placeholder={PLACEHOLDER}
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {patient.last_name} {patient.first_name}
+                        </Typography>
+                      </td>
+                      {/* status */}
+                      <td className={classes}>
+                        <div className="w-max">
+                          <Chip
+                            variant="ghost"
+                            size="sm"
+                            value={status}
+                            color={
+                              status === "active"
+                                ? "blue"
+                                : status === "picked"
+                                ? "green"
+                                : "red"
+                            }
+                          />
+                        </div>
+                      </td>
+                      {/* medicines */}
+                      <td className={classes}>
+                        <Tooltip
+                          content={medicines.map(
+                            ({ medicine, quantity }, index) => {
+                              const isLast = index === medicines.length - 1;
+
+                              return `${medicine.name}: ${quantity}x${
+                                isLast ? "" : ", "
+                              }`;
+                            }
+                          )}
+                          placement="top"
+                        >
+                          <div className="w-max max-h-20 overflow-hidden">
+                            {medicines.map(({ medicine, quantity }, index) => {
+                              const isLast = index === medicines.length - 1;
+                              return (
+                                <Typography
+                                  placeholder={PLACEHOLDER}
+                                  key={index}
+                                >
+                                  {medicine.name}
+                                  {`: ${quantity}x`}
+                                  {isLast ? "" : ", "}
+                                </Typography>
+                              );
+                            })}
+                          </div>
+                        </Tooltip>
+                      </td>
+                      {/* actions */}
+                      <td className={classes}>
+                        <Tooltip content="Edit User">
+                          <IconButton placeholder={PLACEHOLDER} variant="text">
+                            <PencilIcon className="h-4 w-4" />
+                          </IconButton>
+                        </Tooltip>
+                      </td>
+                    </tr>
+                  );
+                }
+              )
+            : null}
         </tbody>
       </table>
+      {!prescriptions && !loading && (
+        <Typography
+          placeholder={PLACEHOLDER}
+          className=" text-center p-2 pt-3 w-full"
+        >
+          No prescriptions
+        </Typography>
+      )}
+      {loading && (
+        <Typography
+          placeholder={PLACEHOLDER}
+          className=" text-center p-2 pt-5 pb-1 w-full"
+        >
+          Loading ...
+        </Typography>
+      )}
     </CardBody>
   );
 };

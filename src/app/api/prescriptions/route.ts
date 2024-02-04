@@ -11,17 +11,17 @@ import {
   PrescriptionModel,
   PrescriptionSchemaZod,
 } from "@/models";
-import { IPrescription } from "@/models/types";
+import { IPrescription, Prescription } from "@/models/types";
 
 // Get all prescriptions
 export const GET = async () => {
   try {
-    const prescriptions = await PrescriptionModel.find({});
+    const prescriptions = (await PrescriptionModel.find({})
+      .populate("doctor")
+      .populate("patient")
+      .populate("medicines.medicine")) as Prescription[];
 
-    return NextResponse.json<SuccessResponse<IPrescription[]>>(
-      { items: prescriptions },
-      { status: 200 }
-    );
+    return NextResponse.json<Prescription[]>(prescriptions);
   } catch (error) {
     return errorHandler(error);
   }
@@ -41,11 +41,6 @@ export const POST = async (req: NextRequest) => {
       picked_at: body.picked_at ? new Date(body.picked_at) : undefined,
     });
 
-    // Check if prescription already exists
-    const prescriptionExist = await PrescriptionModel.findOne({});
-    if (prescriptionExist)
-      return new NextResponse("Prescription already exists!", { status: 400 });
-
     const doctorExist = await DoctorModel.findById(validatedBody.doctor);
     if (!doctorExist) return errorHandler("Doctor not found!", 404);
 
@@ -54,7 +49,7 @@ export const POST = async (req: NextRequest) => {
 
     // Check if medicines exist
     validatedBody.medicines.forEach(async (medicine) => {
-      const medicineExist = await MedicineModel.findById(medicine.medicine_id);
+      const medicineExist = await MedicineModel.findById(medicine.medicine);
       if (!medicineExist) return errorHandler("Medicine not found!", 404);
     });
 

@@ -30,3 +30,5 @@ export interface IPrescription
 }
 
 export interface IDoctor extends z.infer<typeof DoctorSchemaZod>, Document {}
+
+export * from "./prescription";

@@ -1,7 +1,6 @@
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
-import { Button, CardHeader, Typography } from "@material-tailwind/react";
+import { Button, CardHeader, Typography } from "@/components/ui";
 import Link from "next/link";
-import React from "react";
 
 const PLACEHOLDER = "Placeholder";
 
