@@ -12,10 +12,7 @@ export const GET = async () => {
   try {
     const medicines = await MedicineModel.find({});
 
-    return NextResponse.json<SuccessResponse<IMedicine[]>>(
-      { items: medicines },
-      { status: 200 }
-    );
+    return NextResponse.json<IMedicine[]>(medicines);
   } catch (error) {
     return errorHandler(error);
   }
@@ -43,10 +40,7 @@ export const POST = async (req: NextRequest) => {
     // Create medicine
     const medicine = await MedicineModel.create(validatedBody);
 
-    return NextResponse.json<SuccessResponse<IMedicine>>(
-      { items: medicine },
-      { status: 200 }
-    );
+    return NextResponse.json<IMedicine>(medicine);
   } catch (error) {
     return errorHandler(error);
   }

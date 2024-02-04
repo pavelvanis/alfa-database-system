@@ -53,12 +53,13 @@ export const POST = async (req: NextRequest) => {
       });
 
     // Create doctor
-    const doctor = await DoctorModel.create(validatedBody);
+    const createdDoctor = await DoctorModel.create(validatedBody);
 
-    return NextResponse.json<SuccessResponse<IDoctor>>(
-      { items: doctor },
-      { status: 200 }
-    );
+    const doctor = (await DoctorModel.findById(createdDoctor._id)
+      .populate("department")
+      .populate("medical_workspace")) as Doctor;
+
+    return NextResponse.json<Doctor>(doctor);
   } catch (error) {
     return errorHandler(error);
   }

@@ -22,9 +22,7 @@ export const GET = async (
     const medicine = await MedicineModel.findById(id);
     if (!medicine) return errorHandler("Medicine not found", 404);
 
-    return NextResponse.json<SuccessResponse<IMedicine>>({
-      items: medicine,
-    });
+    return NextResponse.json<IMedicine>(medicine);
   } catch (error) {
     return errorHandler(error);
   }
@@ -54,9 +52,7 @@ export const PUT = async (
     );
 
     if (!updatedMedicine) return errorHandler("Medicine not found", 404);
-    return NextResponse.json<SuccessResponse<IMedicine>>({
-      items: updatedMedicine,
-    });
+    return NextResponse.json<IMedicine>(updatedMedicine);
   } catch (error) {
     return errorHandler(error);
   }
@@ -75,9 +71,7 @@ export const DELETE = async (
     const deletedMedicine = await MedicineModel.findByIdAndDelete(id);
     if (!deletedMedicine) return errorHandler("Medicine not found", 404);
 
-    return NextResponse.json<SuccessResponse<IMedicine>>({
-      items: deletedMedicine,
-    });
+    return NextResponse.json<IMedicine>(deletedMedicine);
   } catch (error) {
     return errorHandler(error);
   }

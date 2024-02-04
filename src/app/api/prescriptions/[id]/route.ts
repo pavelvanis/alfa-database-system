@@ -6,7 +6,7 @@ import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
 
 import { PrescriptionModel, PrescriptionSchemaZodOpt } from "@/models";
-import { IPrescription } from "@/models/types";
+import { IPrescription, Prescription } from "@/models/types";
 
 // Get prescription by id
 export const GET = async (
@@ -19,12 +19,13 @@ export const GET = async (
       return errorHandler("Invalid prescription id", 400);
 
     // Find prescription by id
-    const prescription = await PrescriptionModel.findById(id);
+    const prescription = (await PrescriptionModel.findById(id)
+      .populate("patient")
+      .populate("doctor")
+      .populate("medicines.medicine")) as Prescription;
     if (!prescription) return errorHandler("Prescription not found", 404);
 
-    return NextResponse.json<SuccessResponse<IPrescription>>({
-      items: prescription,
-    });
+    return NextResponse.json<Prescription>(prescription);
   } catch (error) {
     return errorHandler(error);
   }
@@ -46,19 +47,20 @@ export const PUT = async (
       return errorHandler("Invalid prescription id", 400);
 
     // Update prescription by id
-    const updatedPrescription = await PrescriptionModel.findByIdAndUpdate(
+    const updatedPrescription = (await PrescriptionModel.findByIdAndUpdate(
       id,
       validatedBody,
       {
         new: true,
       }
-    );
+    )
+      .populate("patient")
+      .populate("doctor")
+      .populate("medicines.medicine")) as Prescription;
 
     if (!updatedPrescription)
       return errorHandler("Prescription not found", 404);
-    return NextResponse.json<SuccessResponse<IPrescription>>({
-      items: updatedPrescription,
-    });
+    return NextResponse.json<Prescription>(updatedPrescription);
   } catch (error) {
     return errorHandler(error);
   }
@@ -75,13 +77,14 @@ export const DELETE = async (
       return errorHandler("Invalid prescription id", 400);
 
     // Delete prescription by id
-    const deletedPrescription = await PrescriptionModel.findByIdAndDelete(id);
+    const deletedPrescription = (await PrescriptionModel.findByIdAndDelete(id)
+      .populate("patient")
+      .populate("doctor")
+      .populate("medicines.medicine")) as Prescription;
 
     if (!deletedPrescription)
       return errorHandler("Prescription not found", 404);
-    return NextResponse.json<SuccessResponse<IPrescription>>({
-      items: deletedPrescription,
-    });
+    return NextResponse.json<Prescription>(deletedPrescription);
   } catch (error) {
     return errorHandler(error);
   }

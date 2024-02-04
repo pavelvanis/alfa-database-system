@@ -12,10 +12,7 @@ export const GET = async () => {
   try {
     const workspaces = await MedicalWorkspaceModel.find({});
 
-    return NextResponse.json<SuccessResponse<IMedicalWorkspace[]>>(
-      { items: workspaces },
-      { status: 200 }
-    );
+    return NextResponse.json<IMedicalWorkspace[]>(workspaces);
   } catch (error) {
     return errorHandler(error);
   }
@@ -43,10 +40,7 @@ export const POST = async (req: NextRequest) => {
     // Create medical workspace
     const workspace = await MedicalWorkspaceModel.create(validatedBody);
 
-    return NextResponse.json<SuccessResponse<IMedicalWorkspace>>(
-      { items: workspace },
-      { status: 200 }
-    );
+    return NextResponse.json<IMedicalWorkspace>(workspace);
   } catch (error) {
     return errorHandler(error);
   }

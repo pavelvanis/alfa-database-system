@@ -8,6 +8,7 @@ import zodValidate from "@/utils/zod-validate";
 import { DoctorModel } from "@/models";
 import { IDoctor } from "@/models/types";
 import { DoctorSchemaZodOpt } from "@/models/zod-schemas";
+import { Doctor } from "@/models/types/doctor";
 
 // Get doctor by id
 export const GET = async (
@@ -19,12 +20,12 @@ export const GET = async (
     if (!isValidObjectId(id)) return errorHandler("Invalid doctor id", 400);
 
     // Find doctor by id
-    const doctor = await DoctorModel.findById(id);
+    const doctor = (await DoctorModel.findById(id)
+      .populate("department")
+      .populate("medical_workspace")) as Doctor;
     if (!doctor) return errorHandler("Doctor not found", 404);
 
-    return NextResponse.json<SuccessResponse<IDoctor>>({
-      items: doctor,
-    });
+    return NextResponse.json<Doctor>(doctor);
   } catch (error) {
     return errorHandler(error);
   }
@@ -45,18 +46,18 @@ export const PUT = async (
     if (!isValidObjectId(id)) return errorHandler("Invalid doctor id", 400);
 
     // Update doctor by id
-    const updatedDoctor = await DoctorModel.findByIdAndUpdate(
+    const updatedDoctor = (await DoctorModel.findByIdAndUpdate(
       id,
       validatedBody,
       {
         new: true,
       }
-    );
+    )
+      .populate("department")
+      .populate("medical_workspace")) as Doctor;
 
     if (!updatedDoctor) return errorHandler("Doctor not found", 404);
-    return NextResponse.json<SuccessResponse<IDoctor>>({
-      items: updatedDoctor,
-    });
+    return NextResponse.json<Doctor>(updatedDoctor);
   } catch (error) {
     return errorHandler(error);
   }
@@ -72,12 +73,12 @@ export const DELETE = async (
     if (!isValidObjectId(id)) return errorHandler("Invalid doctor id", 400);
 
     // Delete doctor by id
-    const deletedDoctor = await DoctorModel.findByIdAndDelete(id);
+    const deletedDoctor = (await DoctorModel.findByIdAndDelete(id)
+      .populate("department")
+      .populate("medical_workspace")) as Doctor;
     if (!deletedDoctor) return errorHandler("Doctor not found", 404);
 
-    return NextResponse.json<SuccessResponse<IDoctor>>({
-      items: deletedDoctor,
-    });
+    return NextResponse.json<Doctor>(deletedDoctor);
   } catch (error) {
     return errorHandler(error);
   }

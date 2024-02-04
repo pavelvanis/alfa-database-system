@@ -22,9 +22,7 @@ export const GET = async (
     const department = await DepartmentModel.findById(id);
     if (!department) return errorHandler("Department not found", 404);
 
-    return NextResponse.json<SuccessResponse<IDepartment>>({
-      items: department,
-    });
+    return NextResponse.json<IDepartment>(department);
   } catch (error) {
     return errorHandler(error);
   }
@@ -54,9 +52,7 @@ export const PUT = async (
     );
 
     if (!updatedDepartment) return errorHandler("Department not found", 404);
-    return NextResponse.json<SuccessResponse<IDepartment>>({
-      items: updatedDepartment,
-    });
+    return NextResponse.json<IDepartment>(updatedDepartment);
   } catch (error) {
     return errorHandler(error);
   }
@@ -75,9 +71,7 @@ export const DELETE = async (
     const deletedDepartment = await DepartmentModel.findByIdAndDelete(id);
     if (!deletedDepartment) return errorHandler("Department not found", 404);
 
-    return NextResponse.json<SuccessResponse<IDepartment>>({
-      items: deletedDepartment,
-    });
+    return NextResponse.json<IDepartment>(deletedDepartment);
   } catch (error) {
     return errorHandler(error);
   }

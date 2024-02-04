@@ -54,11 +54,14 @@ export const POST = async (req: NextRequest) => {
     });
 
     // Create prescription
-    const prescription = await PrescriptionModel.create(validatedBody);
+    const createdPrescription = await PrescriptionModel.create(validatedBody);
 
-    return NextResponse.json<SuccessResponse<IPrescription>>({
-      items: prescription,
-    });
+    const prescription = (await PrescriptionModel.findById(createdPrescription._id)
+      .populate("doctor")
+      .populate("patient")
+      .populate("medicines.medicine")) as Prescription;
+
+    return NextResponse.json<Prescription>(prescription);
   } catch (error) {
     return errorHandler(error);
   }

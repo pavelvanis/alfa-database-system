@@ -20,9 +20,7 @@ export const GET = async (
     const workspace = await MedicalWorkspaceModel.findById(id);
     if (!workspace) return errorHandler("Patient not found", 404);
 
-    return NextResponse.json<SuccessResponse<IMedicalWorkspace>>({
-      items: workspace,
-    });
+    return NextResponse.json<IMedicalWorkspace>(workspace);
   } catch (error) {
     return errorHandler(error);
   }
@@ -54,9 +52,7 @@ export const PUT = async (
 
     if (!updatedWorkspace)
       return errorHandler("Medical workspace not found", 404);
-    return NextResponse.json<SuccessResponse<IMedicalWorkspace>>({
-      items: updatedWorkspace,
-    });
+    return NextResponse.json<IMedicalWorkspace>(updatedWorkspace);
   } catch (error) {
     return errorHandler(error);
   }
@@ -77,9 +73,7 @@ export const DELETE = async (
 
     if (!deletedWorkspace)
       return errorHandler("Medical workspace not found", 404);
-    return NextResponse.json<SuccessResponse<IMedicalWorkspace>>({
-      items: deletedWorkspace,
-    });
+    return NextResponse.json<IMedicalWorkspace>(deletedWorkspace);
   } catch (error) {
     return errorHandler(error);
   }

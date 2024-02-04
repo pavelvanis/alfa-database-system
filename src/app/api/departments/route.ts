@@ -11,9 +11,7 @@ import { DepartmentSchemaZod } from "@/models/zod-schemas";
 export const GET = async () => {
   try {
     const departments = await DepartmentModel.find({});
-    return NextResponse.json<SuccessResponse<IDepartment[]>>({
-      items: departments,
-    });
+    return NextResponse.json<IDepartment[]>(departments);
   } catch (error) {
     return errorHandler(error);
   }
@@ -37,9 +35,7 @@ export const POST = async (req: NextRequest) => {
       return errorHandler("Deparment with this name already exists!");
 
     const department = await DepartmentModel.create(validatedBody);
-    return NextResponse.json<SuccessResponse<IDepartment>>({
-      items: department,
-    });
+    return NextResponse.json<IDepartment>(department);
   } catch (error) {
     return errorHandler(error);
   }

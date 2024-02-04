@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import PatientModel, {  } from "@/models/patient";
+import PatientModel from "@/models/patient";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
@@ -12,10 +12,8 @@ export const GET = async () => {
   try {
     const patients = await PatientModel.find({});
 
-    return NextResponse.json<SuccessResponse<IPatient[]>>(
-      { items: patients },
-      { status: 200 }
-    );
+    return NextResponse.json<IPatient[]>(patients);
+
   } catch (error) {
     return errorHandler(error);
   }
@@ -44,10 +42,7 @@ export const POST = async (req: NextRequest) => {
     // Create patient
     const patient = await PatientModel.create(validatedBody);
 
-    return NextResponse.json<SuccessResponse<IPatient>>(
-      { items: patient },
-      { status: 200 }
-    );
+    return NextResponse.json<IPatient>(patient);
   } catch (error) {
     return errorHandler(error);
   }

@@ -1,14 +1,11 @@
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-import PatientModel, {
-  IPatient,
-  IPatientSchema,
-  IPatientSchemaOpt,
-} from "@/models/patient";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
+import { PatientModel, PatientSchemaZodOpt } from "@/models";
+import { IPatient } from "@/models/types";
 
 // Get patient by id
 export const GET = async (
@@ -23,7 +20,7 @@ export const GET = async (
     const patient = await PatientModel.findById(id);
     if (!patient) return errorHandler("Patient not found", 404);
 
-    return NextResponse.json<SuccessResponse<IPatient>>({ items: patient });
+    return NextResponse.json<IPatient>(patient);
   } catch (error) {
     return errorHandler(error);
   }
@@ -41,9 +38,7 @@ export const DELETE = async (
     const deletedPatient = await PatientModel.findByIdAndDelete(id);
 
     if (!deletedPatient) return errorHandler("Patient not found", 404);
-    return NextResponse.json<SuccessResponse<IPatient>>({
-      items: deletedPatient,
-    });
+    return NextResponse.json<IPatient>(deletedPatient);
   } catch (error) {
     return errorHandler(error);
   }
@@ -57,7 +52,7 @@ export const PUT = async (
     const body = (await req.json()) as IPatient;
 
     // Zod validation
-    const validatedBody = zodValidate(IPatientSchemaOpt, body);
+    const validatedBody = zodValidate(PatientSchemaZodOpt, body);
 
     // Check valid id
     if (!isValidObjectId(id)) return errorHandler("Invalid patient id", 400);
@@ -72,9 +67,7 @@ export const PUT = async (
     );
 
     if (!updatedPatient) return errorHandler("Patient not found", 404);
-    return NextResponse.json<SuccessResponse<IPatient>>({
-      items: updatedPatient,
-    });
+    return NextResponse.json<IPatient>(updatedPatient);
   } catch (error) {
     return errorHandler(error);
   }
