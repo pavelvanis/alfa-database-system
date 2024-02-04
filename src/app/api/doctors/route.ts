@@ -7,16 +7,18 @@ import DoctorModel from "@/models/doctor";
 import { DepartmentModel, MedicalWorkspaceModel } from "@/models";
 import { IDoctor } from "@/models/types";
 import { DoctorSchemaZod } from "@/models/zod-schemas/doctor";
+import { Doctor } from "@/models/types/doctor";
 
 // Get all doctors
 export const GET = async () => {
   try {
-    const doctors = await DoctorModel.find({});
+    const doctors = (await DoctorModel.find({})
+      .populate("department")
+      .populate("medical_workspace")) as Doctor[];
 
-    return NextResponse.json<SuccessResponse<IDoctor[]>>(
-      { items: doctors },
-      { status: 200 }
-    );
+    console.log("GET:", doctors);
+
+    return NextResponse.json<Doctor[]>(doctors);
   } catch (error) {
     return errorHandler(error);
   }
