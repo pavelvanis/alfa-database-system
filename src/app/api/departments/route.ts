@@ -1,11 +1,11 @@
-import DepartmentModel, {
-  IDepartment,
-  IDepartmentSchema,
-} from "@/models/department";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
 import { NextRequest, NextResponse } from "next/server";
+
+import DepartmentModel from "@/models/department";
+import { IDepartment } from "@/models/types";
+import { DepartmentSchemaZod } from "@/models/zod-schemas";
 
 // Get all departments
 export const GET = async () => {
@@ -27,7 +27,7 @@ export const POST = async (req: NextRequest) => {
     // Add mongo sanitization
 
     // Zod validation
-    const validatedBody = zodValidate(IDepartmentSchema, body);
+    const validatedBody = zodValidate(DepartmentSchemaZod, body);
 
     const departmentExist = await DepartmentModel.findOne({
       name: validatedBody.name,

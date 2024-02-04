@@ -3,7 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
-import MedicineModel, { IMedicine, IMedicineSchema } from "@/models/medicine";
+import MedicineModel from "@/models/medicine";
+import { IMedicine } from "@/models/types";
+import { MedicineSchemaZod } from "@/models";
 
 // Get all medicines
 export const GET = async () => {
@@ -27,7 +29,7 @@ export const POST = async (req: NextRequest) => {
     // Add mongo sanitization
 
     // Zod validation
-    const validatedBody = zodValidate(IMedicineSchema, body);
+    const validatedBody = zodValidate(MedicineSchemaZod, body);
 
     // Check if medicine already exists
     const medicineExist = await MedicineModel.findOne({

@@ -3,14 +3,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
+
 import {
   DoctorModel,
-  IPrescription,
   MedicineModel,
   PatientModel,
   PrescriptionModel,
+  PrescriptionSchemaZod,
 } from "@/models";
-import { PrescriptionSchemaZod } from "@/models/prescription";
+import { IPrescription } from "@/models/types";
 
 // Get all prescriptions
 export const GET = async () => {

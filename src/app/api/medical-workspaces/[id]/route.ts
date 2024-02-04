@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
-import { IMedicalWorkspace, MedicalWorkspaceModel } from "@/models";
-import { IMedicalWorkspaceSchemaOpt } from "@/models/medical-workspace";
+import { MedicalWorkspaceModel, MedicalWorkspaceSchemaZodOpt } from "@/models";
+import { IMedicalWorkspace } from "@/models/types";
 
 // Get medical workspace by id
 export const GET = async (
@@ -37,7 +37,7 @@ export const PUT = async (
     const body = (await req.json()) as IMedicalWorkspace;
 
     // Zod validation
-    const validatedBody = zodValidate(IMedicalWorkspaceSchemaOpt, body);
+    const validatedBody = zodValidate(MedicalWorkspaceSchemaZodOpt, body);
 
     // Check valid id
     if (!isValidObjectId(id))

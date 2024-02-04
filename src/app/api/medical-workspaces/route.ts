@@ -3,8 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
-import { IMedicalWorkspace, MedicalWorkspaceModel } from "@/models";
-import { IMedicalWorkspaceSchemaOpt } from "@/models/medical-workspace";
+
+import { MedicalWorkspaceModel, MedicalWorkspaceSchemaZod } from "@/models";
+import { IMedicalWorkspace } from "@/models/types";
 
 // Get all medical workspaces
 export const GET = async () => {
@@ -28,14 +29,16 @@ export const POST = async (req: NextRequest) => {
     // Add mongo sanitization
 
     // Zod validation
-    const validatedBody = zodValidate(IMedicalWorkspaceSchemaOpt, body);
+    const validatedBody = zodValidate(MedicalWorkspaceSchemaZod, body);
 
     // Check if workspace already exists
     const workspaceExist = await MedicalWorkspaceModel.findOne({
       name: validatedBody.name,
     });
     if (workspaceExist)
-      return new NextResponse("Workspace with this name already exists!", { status: 400 });
+      return new NextResponse("Workspace with this name already exists!", {
+        status: 400,
+      });
 
     // Create medical workspace
     const workspace = await MedicalWorkspaceModel.create(validatedBody);

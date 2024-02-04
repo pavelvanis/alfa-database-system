@@ -4,8 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
-import { IPrescription, PrescriptionModel } from "@/models";
-import { PrescriptionSchemaZodOpt } from "@/models/prescription";
+
+import { PrescriptionModel, PrescriptionSchemaZodOpt } from "@/models";
+import { IPrescription } from "@/models/types";
 
 // Get prescription by id
 export const GET = async (

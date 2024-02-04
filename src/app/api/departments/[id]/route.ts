@@ -1,13 +1,13 @@
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-import DepartmentModel, {
-  IDepartment,
-  IDepartmentSchemaOpt,
-} from "@/models/department";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
+
+import DepartmentModel from "@/models/department";
+import { IDepartment } from "@/models/types";
+import { DepartmentSchemaZodOpt } from "@/models/zod-schemas";
 
 // Get department by id
 export const GET = async (
@@ -39,7 +39,7 @@ export const PUT = async (
     const body = (await req.json()) as IDepartment;
 
     // Zod validation
-    const validatedBody = zodValidate(IDepartmentSchemaOpt, body);
+    const validatedBody = zodValidate(DepartmentSchemaZodOpt, body);
 
     // Check valid id
     if (!isValidObjectId(id)) return errorHandler("Invalid department id", 400);

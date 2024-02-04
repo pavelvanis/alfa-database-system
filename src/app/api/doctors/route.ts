@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
-import DoctorModel, { IDoctor, DoctorSchemaZod } from "@/models/doctor";
+import DoctorModel from "@/models/doctor";
 import { DepartmentModel, MedicalWorkspaceModel } from "@/models";
+import { IDoctor } from "@/models/types";
+import { DoctorSchemaZod } from "@/models/zod-schemas/doctor";
 
 // Get all doctors
 export const GET = async () => {

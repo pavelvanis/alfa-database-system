@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import PatientModel, { IPatient, IPatientSchema } from "@/models/patient";
+import PatientModel, {  } from "@/models/patient";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
+import { IPatient } from "@/models/types";
+import { PatientSchemaZod } from "@/models";
 
 // Get all patients
 export const GET = async () => {
@@ -27,7 +29,7 @@ export const POST = async (req: NextRequest) => {
     // Add mongo sanitization
 
     // Zod validation
-    const validatedBody = zodValidate(IPatientSchema, {
+    const validatedBody = zodValidate(PatientSchemaZod, {
       ...body,
       birth_date: new Date(body.birth_date),
     });

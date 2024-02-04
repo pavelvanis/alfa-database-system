@@ -1,13 +1,13 @@
 import { isValidObjectId } from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
-import MedicineModel, {
-  IMedicine,
-  IMedicineSchemaOpt,
-} from "@/models/medicine";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
+
+import MedicineModel from "@/models/medicine";
+import { IMedicine } from "@/models/types";
+import { MedicineSchemaZodOpt } from "@/models";
 
 // Get medicine by id
 export const GET = async (
@@ -39,7 +39,7 @@ export const PUT = async (
     const body = (await req.json()) as IMedicine;
 
     // Zod validation
-    const validatedBody = zodValidate(IMedicineSchemaOpt, body);
+    const validatedBody = zodValidate(MedicineSchemaZodOpt, body);
 
     // Check valid id
     if (!isValidObjectId(id)) return errorHandler("Invalid medicine id", 400);

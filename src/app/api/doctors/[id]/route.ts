@@ -4,8 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { SuccessResponse } from "@/types/api-request";
 import { errorHandler } from "@/utils/error-handler";
 import zodValidate from "@/utils/zod-validate";
-import { DoctorModel, IDoctor } from "@/models";
-import { DoctorSchemaZodOpt } from "@/models/doctor";
+
+import { DoctorModel } from "@/models";
+import { IDoctor } from "@/models/types";
+import { DoctorSchemaZodOpt } from "@/models/zod-schemas";
 
 // Get doctor by id
 export const GET = async (

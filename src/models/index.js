@@ -7,3 +7,5 @@ export {
 export { default as MedicineModel, IMedicine } from "./medicine";
 export { default as PatientModel, IPatient } from "./patient";
 export { default as PrescriptionModel, IPrescription } from "./prescription";
+
+export * from "./zod-schemas"
