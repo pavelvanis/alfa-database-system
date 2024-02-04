@@ -4,6 +4,7 @@ import {
   CardBody,
   Chip,
   IconButton,
+  Spinner,
   Tooltip,
   Typography,
 } from "@/components/ui";
@@ -225,7 +226,7 @@ const TesterData = () => {
                       </td>
                       {/* actions */}
                       <td className={classes}>
-                        <Tooltip content="Edit User">
+                        <Tooltip content="Edit recept">
                           <IconButton placeholder={PLACEHOLDER} variant="text">
                             <PencilIcon className="h-4 w-4" />
                           </IconButton>
@@ -247,12 +248,15 @@ const TesterData = () => {
         </Typography>
       )}
       {loading && (
-        <Typography
-          placeholder={PLACEHOLDER}
-          className=" text-center p-2 pt-5 pb-1 w-full"
-        >
-          Loading ...
-        </Typography>
+        <div className=" w-full flex justify-center items-center pt-5">
+          <Spinner />
+        </div>
+        // <Typography
+        //   placeholder={PLACEHOLDER}
+        //   className=" text-center p-2 pt-5 pb-1 w-full"
+        // >
+        //   Loading ...
+        // </Typography>
       )}
     </CardBody>
   );
