@@ -1,5 +1,13 @@
+import TableBody from "@/components/features/table/table-body";
+import TableHeader from "@/components/features/table/table-header";
 import mongoose from "mongoose";
 import { notFound } from "next/navigation";
+
+async function getCollection(collection: string) {
+  const res = await fetch(`${process.env.BASE_URL}/api/${collection}`);
+  const data = await res.json();
+  return data;
+}
 
 const CollectionPage = async ({
   params: { collection },
@@ -13,7 +21,15 @@ const CollectionPage = async ({
   );
 
   if (!available_collections.includes(collection)) return notFound();
-  return <div>{collection}</div>;
+
+  const data = await getCollection(collection);
+
+  return (
+    <>
+      <TableHeader {...{ collection, data }} />
+      <TableBody {...{ collection, data }} />
+    </>
+  );
 };
 
 export default CollectionPage;
